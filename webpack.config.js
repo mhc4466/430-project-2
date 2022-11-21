@@ -15,7 +15,10 @@ module.exports = {
             },
         ],
     },
-    mode: 'production',
+    resolve: {
+        extensions: ['.js']
+    },
+    mode: 'development',
     watchOptions: {
         aggregateTimeout: 200,
     },

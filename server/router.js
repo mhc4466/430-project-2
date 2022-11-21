@@ -6,16 +6,16 @@ const router = (app) => {
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
 
   app.get('/getToken', mid.requiresSecure, controllers.Account.getToken);
-  app.get('/getDomos', mid.requiresLogin, controllers.Domo.getDomos);
+  app.get('/getBlocksets', mid.requiresLogin, controllers.Blockset.getBlocksets);
 
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
 
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
 
-  app.get('/maker', mid.requiresLogin, controllers.Domo.makerPage);
-  app.post('/maker', mid.requiresLogin, controllers.Domo.makeDomo);
+  app.get('/maker', mid.requiresLogin, controllers.Blockset.makerPage);
+  app.post('/maker', mid.requiresLogin, controllers.Blockset.makeBlockset);
 
-  app.post('/delete', mid.requiresLogin, controllers.Domo.deleteDomo);
+  app.post('/delete', mid.requiresLogin, controllers.Blockset.deleteBlockset);
 
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };

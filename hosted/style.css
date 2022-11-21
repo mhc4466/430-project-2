@@ -47,7 +47,7 @@ nav:nth-child(1) {
     background-color: #66bdff;
 }
 
-.domoForm {
+.blocksetForm {
     border: 2px solid #338acc;
     height: 35px;
     width: 900px;
@@ -58,7 +58,7 @@ nav:nth-child(1) {
     border-top-right-radius: 4px;
 }
 
-.domoForm label {
+.blocksetForm label {
     display: inline-block;
     width: 75px;
     margin-left: 10px;
@@ -67,11 +67,11 @@ nav:nth-child(1) {
     color: white;
 }
 
-.domoForm input[type=text] {
+.blocksetForm input[type=text] {
     /*float:left;*/
 }
 
-.makeDomoSubmit {
+.makeBlocksetSubmit {
     transition: background-color 0.4s ease;
     display: inline;
     width: 90px;
@@ -81,11 +81,11 @@ nav:nth-child(1) {
     text-decoration: none;
 }
 
-.makeDomoSubmit:link, .makeDomoSubmit:visited, .makeDomoSubmit:hover, .makeDomoSubmit:active {
+.makeBlocksetSubmit:link, .makeBlocksetSubmit:visited, .makeBlocksetSubmit:hover, .makeBlocksetSubmit:active {
     color: white;
 }
 
-.makeDomoSubmit:hover {
+.makeBlocksetSubmit:hover {
     transition: background-color 0.4s ease;
     background-color: #338acc;
 }
@@ -151,7 +151,7 @@ nav:nth-child(1) {
     display: none;
 }
 
-#domoMessage {
+#blocksetMessage {
     top: 250px;
     width: 250px;
     height: 650px;
@@ -161,7 +161,7 @@ nav:nth-child(1) {
     overflow: hidden;
 }
 
-#domoMessage h3 {
+#blocksetMessage h3 {
     width: 200px;
     position: absolute;
     top: 0px;
@@ -181,7 +181,7 @@ nav:nth-child(1) {
     font-style: italic;
 }
 
-#domo {
+#blockset {
     z-index: 225;
     margin-top: -20px;
     margin-left: 135px;
@@ -192,7 +192,7 @@ nav:nth-child(1) {
     transform: rotate(330deg);
 }
 
-#domos {
+#blocksets {
     width: 40%;
     min-width: 400px;
     border: 2px solid #55acee;
@@ -201,7 +201,7 @@ nav:nth-child(1) {
     margin-top: 100px;
 }
 
-.domo {
+.blockset {
     width: 95%;
     margin: 0 auto;
     margin-top: 2px;
@@ -214,7 +214,7 @@ nav:nth-child(1) {
     overflow: hidden;
 }
 
-.domo:hover {
+.blockset:hover {
     transition: border-color 0.2s ease-out;
     border-color: rgba(255,255,255, 0.8);
     transition: background-color 2.6s ease-out;
@@ -231,7 +231,7 @@ img.domoFace {
     float:left;
 }
 
-h3.emptyDomo {
+h3.emptyBlockset {
     width: 400px;
     font-size: 1.5em;
     margin: 0 auto;
@@ -239,7 +239,7 @@ h3.emptyDomo {
     margin-top: 18px;
 }
 
-h3.domoName {
+h3.blocksetName {
     float:left;
     width: 200px;
     font-weight: bold;
@@ -247,7 +247,7 @@ h3.domoName {
     font-size: 1.5em;
 }
 
-h3.domoAge {
+h3.blocksetAge {
     float:right;
     text-align: left;
     width: 100px;
@@ -256,7 +256,7 @@ h3.domoAge {
     font-size: 1.5em;
 }
 
-h3.domoWeight {
+h3.blocksetWeight {
     float: right;
     text-align: left;
     width: 100px;
@@ -265,10 +265,10 @@ h3.domoWeight {
     font-size: 1.5em;
 }
 
-.domo:first-child {
+.blockset:first-child {
     margin-top: 10px;
 }
 
-.domo:last-child {
+.blockset:last-child {
     margin-bottom:10px;
 }
