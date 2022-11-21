@@ -42,14 +42,16 @@ const deleteBlockset = async (req, res) => {
   }
 };
 
-const getBlocksets = (req, res) => BlocksetModel.findByOwner(req.session.account._id, (err, docs) => {
-  if (err) {
-    console.log(err);
-    return res.status(400).json({ error: 'An error has occurred' });
-  }
-  console.log(docs);
-  return res.json({ blocksets: docs });
-});
+const getBlocksets = (req, res) => {
+  BlocksetModel.findByOwner(req.session.account._id, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error has occurred' });
+    }
+    console.log(docs);
+    return res.json({ blocksets: docs });
+  });
+};
 
 module.exports = {
   makerPage,
