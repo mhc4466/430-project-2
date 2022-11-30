@@ -104,15 +104,15 @@ const addBlock = (e) => {
         newBlock.endDay = form.querySelector("#blockEndDay").value;
         newBlock.endTime = form.querySelector("#blockEndTime").value;
 
-        let blocks;
-        if (!localStorage.getItem("blocks")) {
-            blocks = [];
+        let blocksets;
+        if (!sessionStorage.getItem("blocksets")) {
+            blocksets = [];
         } else {
-            blocks = JSON.parse(localStorage.getItem("blocks"));
+            blocksets = JSON.parse(sessionStorage.getItem("blocksets"));
         }
-        blocks.push(newBlock);
-        let blocksString = JSON.stringify(blocks);
-        localStorage.setItem("blocks", blocksString);
+        blocksets.push(newBlock);
+        let blocksString = JSON.stringify(blocksets);
+        sessionStorage.setItem("blocksets", blocksString);
     }
 }
 
@@ -177,7 +177,7 @@ const BlocksetForm = (props) => {
 };
 
 const BlocksetList = (props) => {
-    if (props.blockset.length === 0) {
+    if (props.blocksets.length === 0) {
         return (
             <div className="blocksetList">
                 <h3 className="emptyBlockset">No Blocksets Yet!</h3>
@@ -219,11 +219,24 @@ const loadBlocksetsFromServer = async () => {
     const tokenResponse = await fetch('/getToken');
     const tokenData = await tokenResponse.json();
 
+    return data.blocksets;
+    /*
     ReactDOM.render(
         <BlocksetList csrf={tokenData.csrfToken} blockset={data.blocksets} />,
-        document.getElementById('blockset')
+        document.getElementById('blocksets')
     );
+    */
 };
+
+const loadLocalBlocksets = () => {
+    let blocks;
+    if (!sessionStorage.getItem("blocksets")) {
+        blocks = [];
+    } else {
+        blocks = JSON.parse(sessionStorage.getItem("blocksets"));
+    }
+    return blocks;
+}
 
 const init = async () => {
     const response = await fetch('/getToken');
@@ -241,11 +254,16 @@ const init = async () => {
     );
 
     ReactDOM.render(
-        <BlocksetList csrf={data.csrfToken} blockset={[]} />,
+        <BlocksetList csrf={data.csrfToken} blocksets={[]} />,
         document.getElementById('blocksets')
     );
 
-    loadBlocksetsFromServer();
+    let localBlocksets = loadLocalBlocksets.length ? loadLocalBlocksets : [];
+    const blocksets = localBlocksets.concat(loadBlocksetsFromServer);
+    ReactDOM.render(
+        <BlocksetList csrf={data.csrfToken} blockset={blocksets} />,
+        document.getElementById('blocksets')
+    );
 };
 
 window.onload = init;
