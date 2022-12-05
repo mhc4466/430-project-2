@@ -40,6 +40,23 @@ const deleteBlockset = (e) => {
     return false;
 };
 
+const deleteBlock = (e) => {
+    e.preventDefault();
+    helper.hideError();
+
+    const _id = e.target.querySelector('.blockId').value;
+    const _csrf = e.target.querySelector('._csrf').value;
+
+    if (!_id) {
+        helper.handleError('Could not identify Block');
+        return false;
+    }
+
+    helper.sendPost(e.target.action, {_id, _csrf}, loadScheduleFromServer);
+    
+    return false;
+}
+
 //Ensures there are no impossible configurations of blocks
 //Returns true if a problem is found, false otherwise
 const sanitizeBlock = (e) => {
@@ -110,7 +127,7 @@ const addBlock = (e) => {
             blocksetId: form.querySelector(".blocksetId").value,
             block: newBlock,
             _csrf: form.querySelector(".csrf").value
-        })
+        }, loadScheduleFromServer);
         /*
         let blocksets;
         if (!sessionStorage.getItem("blocksets")) {
@@ -226,13 +243,13 @@ const Blockset = (props) => {
         return (
             <div key={block.id} className="block">
                 <h3 className="blockName"> {ntd[block.startDay]} {block.startTime} - {ntd[block.endDay]} {block.endTime}</h3>
-                <form className="deleteForm" 
-                    onSubmit={deleteBlockset} 
-                    name="deleteForm" 
-                    action="/delete" 
+                <form className="deleteBlockForm" 
+                    onSubmit={deleteBlock} 
+                    name="deleteBlockForm" 
+                    action="/deleteBlock" 
                     method="POST" 
                 >
-                    <input className="blockId" type="hidden" name="blockId" value={block._id} />
+                    <input className="blockId" type="hidden" name="blockId" value={block.id} />
                     <input className="_csrf" type="hidden" name="_csrf" value={props.csrf} />
                     <input className="deleteSubmit" type="submit" value="Delete" />
                 </form>
@@ -258,7 +275,7 @@ const Blockset = (props) => {
             <div className="blockList">
                 {blockNodes}
             </div>
-                <BlockAdder />
+                <BlockAdder blocksetId={props.blockset._id} csrf={props.csrf}/>
         </div>
     )
 };

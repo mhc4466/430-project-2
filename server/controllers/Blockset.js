@@ -71,11 +71,25 @@ const newBlock = (req, res) => {
 
 const deleteBlockset = async (req, res) => {
   if (!req.body._id) {
-    return res.status(400).json({ error: 'Client failed to send Blockset ID' });
+    return res.status(400).json({ error: 'Server failed to receive Blockset ID from client' });
   }
 
   try {
     Blockset.deleteID(req.body._id);
+    return res.status(200).json({ message: 'Blockset deleted' });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: 'Could not delete Blockset' });
+  }
+};
+
+const deleteBlock = async (req, res) => {
+  if (!req.body._id) {
+    return res.status(400).json({ error: 'Server failed to receive Block ID from client' });
+  }
+
+  try {
+    Blockset.deleteBlockByUUID(req.body._id);
     return res.status(200).json({ message: 'Blockset deleted' });
   } catch (err) {
     console.log(err);
@@ -111,6 +125,7 @@ module.exports = {
   newBlockset,
   newBlock,
   deleteBlockset,
+  deleteBlock,
   getBlocksets,
   getSchedule,
 };
