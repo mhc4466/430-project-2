@@ -197,7 +197,8 @@ const NewBlocksetForm = (props) => {
 //Each blockset has a name and visibility level and can be deleted in entirety
 //Contains a place to add new blocks and delete them
 const Blockset = (props) => {
-    if (!props.blocks || props.blocks.length === 0) {
+    console.log(props);
+    if (!props.blockset.blocks || props.blockset.blocks.length === 0) {
         return (
             <div className="blockset">
                 <div className="blocksetHeader">
@@ -221,21 +222,19 @@ const Blockset = (props) => {
         );
     }
 
-    const blockNodes = props.blocks.map(block => {
+    const blockNodes = props.blockset.blocks.map(block => {
         return (
-            <div key={block._id} className="block">
-                <img src="/assets/img/domoface.jpeg" alt="domo face" className="blockFace" />
-                <h3 className="blockName"> Name: {block.name} </h3>
-                <form id="deleteForm" 
+            <div key={block.id} className="block">
+                <h3 className="blockName"> {ntd[block.startDay]} {block.startTime} - {ntd[block.endDay]} {block.endTime}</h3>
+                <form className="deleteForm" 
                     onSubmit={deleteBlockset} 
                     name="deleteForm" 
                     action="/delete" 
                     method="POST" 
-                    className="deleteForm"
                 >
-                    <input id="blockId" type="hidden" name="blockId" value={block._id} />
-                    <input id="_csrf" type="hidden" name="_csrf" value={props.csrf} />
-                    <input id="deleteSubmit" type="submit" value="Delete" />
+                    <input className="blockId" type="hidden" name="blockId" value={block._id} />
+                    <input className="_csrf" type="hidden" name="_csrf" value={props.csrf} />
+                    <input className="deleteSubmit" type="submit" value="Delete" />
                 </form>
             </div>
         );
