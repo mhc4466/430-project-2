@@ -186,15 +186,15 @@ nav:nth-child(1) {
     margin-top: -20px;
     margin-left: 135px;
     height: 450px;
-    width: 300px;
+    width: 700px;
     -ms-transform: rotate(330deg);
     -webkit-transform: rotate(330deg); 
     transform: rotate(330deg);
 }
 
 #blocksets {
-    width: 40%;
-    min-width: 400px;
+    width: 80%;
+    min-width: 700px;
     border: 2px solid #55acee;
     border-radius: 4px;
     margin: 0 auto;
@@ -208,7 +208,6 @@ nav:nth-child(1) {
     margin-bottom: 2px;
     border: 2px solid #55acee;
     border-radius: 4px;
-    background-color: #55acee;
     padding: 10px;
     min-height:60px;
     overflow: hidden;
@@ -271,4 +270,27 @@ h3.blocksetWeight {
 
 .blockset:last-child {
     margin-bottom:10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+.blocksetHeader {
+    background-color: #55acee;
+}
+
+.blocksetName h3 {
+    display: inline;
+}
+
+.deleteBlocksetForm {
+    display: inline;
+    float: right;
 }

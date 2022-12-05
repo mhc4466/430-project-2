@@ -28,6 +28,48 @@ const makeBlockset = async (req, res) => {
   }
 };
 
+const newBlockset = async (req, res) => {
+  if (!req.body.name) {
+    return res.status(400).json({ error: 'Name is required' });
+  }
+
+  const blocksetData = {
+    name: req.body.name,
+    visibility: req.body.visibility,
+    blocks: [],
+    owner: req.session.account._id
+  };
+
+  try {
+    const newBlockset = new Blockset(blocksetData);
+    await newBlockset.save();
+    return res.status(201).json({ name: newBlockset.name, visiblity: newBlockset.visiblity });
+  } catch (err) {
+    console.log(err);
+    if (err.code === 11000) {
+      return res.status(400).json({ error: 'Blockset already exists' });
+    }
+    return res.status(400).json({ error: 'An error occurred' });
+  }
+};
+
+const newBlock = async (req, res) => {
+  if (!req.body.blocksetId || !req.body.block) {
+    return res.status(400).json({ error: 'Client failed to provide new block to add' });
+  }
+
+  BlocksetModel.addBlock(req.body.blocksetId, req.body.block, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred while adding a block to a blockset' });
+    }
+    console.log(docs);
+    return res.json({ blocksets: docs });
+  });
+
+
+}
+
 const deleteBlockset = async (req, res) => {
   if (!req.body._id) {
     return res.status(400).json({ error: 'Client failed to send Blockset ID' });
@@ -53,9 +95,24 @@ const getBlocksets = (req, res) => {
   });
 };
 
+const getSchedule = (req, res) => {
+  BlocksetModel.findByOwner(req.session.account._id, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error has occurred while getting user\'s own schedule' });
+    }
+    console.log(docs);
+    return res.json({ blocksets: docs });
+  });
+};
+
+
 module.exports = {
   makerPage,
   makeBlockset,
+  newBlockset,
+  newBlock,
   deleteBlockset,
   getBlocksets,
+  getSchedule,
 };

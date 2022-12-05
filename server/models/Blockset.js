@@ -12,7 +12,7 @@ const BlocksetSchema = new mongoose.Schema({
     trim: true,
     set: setName,
   },
-  visibilityLevel: {
+  visibility: {
     type: Number,
     required: true,
     min: 0,
@@ -72,6 +72,13 @@ BlocksetSchema.statics.findByOwner = (ownerId, callback) => {
 
   return BlocksetModel.find(search).select('name blocks').lean().exec(callback);
 };
+
+BlocksetSchema.statics.addBlock = async (blocksetId, block, callback) => {
+  const doc = BlocksetModel.findById(blocksetId);
+  return doc.updateOne(
+    {$push: { blocks: block }}
+  ).select('name blocks').lean().exec(callback);
+}
 
 BlocksetSchema.statics.deleteID = async (id) => {
   const search = {
