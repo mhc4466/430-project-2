@@ -76,9 +76,9 @@ BlocksetSchema.statics.findByOwner = (ownerId, callback) => {
 BlocksetSchema.statics.addBlock = async (blocksetId, block, callback) => {
   const doc = BlocksetModel.findById(blocksetId);
   return doc.updateOne(
-    {$push: { blocks: block }}
+    { $push: { blocks: block } },
   ).select('name blocks').lean().exec(callback);
-}
+};
 
 BlocksetSchema.statics.deleteID = async (id) => {
   const search = {

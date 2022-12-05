@@ -37,13 +37,13 @@ const newBlockset = async (req, res) => {
     name: req.body.name,
     visibility: req.body.visibility,
     blocks: [],
-    owner: req.session.account._id
+    owner: req.session.account._id,
   };
 
   try {
-    const newBlockset = new Blockset(blocksetData);
-    await newBlockset.save();
-    return res.status(201).json({ name: newBlockset.name, visiblity: newBlockset.visiblity });
+    const addedBlockset = new Blockset(blocksetData);
+    await addedBlockset.save();
+    return res.status(201).json({ name: addedBlockset.name, visiblity: addedBlockset.visiblity });
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {
@@ -53,7 +53,7 @@ const newBlockset = async (req, res) => {
   }
 };
 
-const newBlock = async (req, res) => {
+const newBlock = (req, res) => {
   if (!req.body.blocksetId || !req.body.block) {
     return res.status(400).json({ error: 'Client failed to provide new block to add' });
   }
@@ -66,9 +66,8 @@ const newBlock = async (req, res) => {
     console.log(docs);
     return res.json({ blocksets: docs });
   });
-
-
-}
+  return 1;
+};
 
 const deleteBlockset = async (req, res) => {
   if (!req.body._id) {
@@ -105,7 +104,6 @@ const getSchedule = (req, res) => {
     return res.json({ blocksets: docs });
   });
 };
-
 
 module.exports = {
   makerPage,
