@@ -84,12 +84,12 @@ const deleteBlockset = async (req, res) => {
 };
 
 const deleteBlock = async (req, res) => {
-  if (!req.body._id) {
-    return res.status(400).json({ error: 'Server failed to receive Block ID from client' });
+  if (!req.body._id || !req.body._bsid) {
+    return res.status(400).json({ error: 'Server failed to receive an ID from client' });
   }
-
+  
   try {
-    Blockset.deleteBlockByUUID(req.body._id);
+    Blockset.deleteBlockByUUID(req.body._bsid, req.body._id);
     return res.status(200).json({ message: 'Blockset deleted' });
   } catch (err) {
     console.log(err);

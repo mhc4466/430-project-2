@@ -87,14 +87,20 @@ BlocksetSchema.statics.deleteID = async (id) => {
   return BlocksetModel.findOneAndDelete(search).select('name').lean().exec();
 };
 
-BlocksetSchema.statics.deleteBlockByUUID = async (id) => {
+BlocksetSchema.statics.deleteBlockByUUID = async (bsid, uuid) => {
   const search = {
-    id: id
-  }
-  const doc = BlocksetModel.find(search).select('name blocks').lean().exec();
-  
-  return BlocksetModel.findOneAndDelete(search).select('startDay').lean().exec();
-}
+    _id: mongoose.Types.ObjectId(bsid),
+  };
+  //const doc = BlocksetModel.find(search).select('name blocks').lean().exec();
+  console.log("Search:");
+  console.log(await BlocksetModel.find(search).select('name blocks').lean().exec());
+
+  return BlocksetModel.updateOne(search, { $pull: { blocks: { id: uuid } } }).lean().exec();
+
+  return doc.updateOne({ $pull: { blocks: { id: uuid } } });
+
+  // return BlocksetModel.findOneAndDelete(search).select('startDay').lean().exec();
+};
 
 BlocksetModel = mongoose.model('Blockset', BlocksetSchema);
 

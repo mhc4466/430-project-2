@@ -45,6 +45,7 @@ const deleteBlock = (e) => {
     helper.hideError();
 
     const _id = e.target.querySelector('.blockId').value;
+    const _bsid = e.target.querySelector('.blocksetId').value;
     const _csrf = e.target.querySelector('._csrf').value;
 
     if (!_id) {
@@ -52,7 +53,7 @@ const deleteBlock = (e) => {
         return false;
     }
 
-    helper.sendPost(e.target.action, {_id, _csrf}, loadScheduleFromServer);
+    helper.sendPost(e.target.action, {_id, _bsid, _csrf}, loadScheduleFromServer);
     
     return false;
 }
@@ -250,6 +251,7 @@ const Blockset = (props) => {
                     method="POST" 
                 >
                     <input className="blockId" type="hidden" name="blockId" value={block.id} />
+                    <input className="blocksetId" type="hidden" name="blocksetId" value={props.blockset._id} />
                     <input className="_csrf" type="hidden" name="_csrf" value={props.csrf} />
                     <input className="deleteSubmit" type="submit" value="Delete" />
                 </form>
