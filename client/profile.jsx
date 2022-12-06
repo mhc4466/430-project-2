@@ -13,16 +13,11 @@ const sendGet = async (url) => {
     return result;
 }
 
-const getFriends = async (e) => {
-    e.preventDefault();
+const getFriends = async () => {
     helper.hideError();
 
-    const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
+    const result = await sendGet('getFriends');
+    console.log(result);
 }
 
 const addFriend = async (e) => {
@@ -125,6 +120,8 @@ const init = async () => {
         <RequestsIncoming />,
         document.getElementById('friendRequestsIn')
     );
+
+    getFriends();
 };
 
 window.onload = init;

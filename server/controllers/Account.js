@@ -124,10 +124,10 @@ const addFriend = (req, res) => {
   return res.status(200).json({ message: 'test' });
 };
 
-const getFriends = (req, res) => {
+const getFriends = async (req, res) => {
   const user = req.session.account._id;
-  console.log(user);
-  return res.status(200).json({ message: 'test' });
+  const doc = await AccountModel.findOne({ _id: user }).select('friends').lean().exec();
+  return res.json({ friends: doc.friends })
 };
 
 module.exports = {
