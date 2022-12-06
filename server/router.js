@@ -22,6 +22,8 @@ const router = (app) => {
   app.post('/deleteBlockset', mid.requiresLogin, controllers.Blockset.deleteBlockset);
   app.post('/deleteBlock', mid.requiresLogin, controllers.Blockset.deleteBlock);
 
+  app.get('/profile', mid.requiresSecure, mid.requiresLogin, controllers.Profile.profilePage);
+
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 

@@ -6,34 +6,15 @@
   <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
   <link rel="shortcut icon" href="/assets/img/favicon.png"/>
   <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
+  <link rel="stylesheet" type="text/css" href="/assets/profile.css"/>
 </head>
 <body>
   <nav><a href="/login"><img id="logo" src="/assets/img/icon.png" alt="calendar logo"/></a>
     <div class="navlink"><a href="/logout">Log out</a></div>
-    <div class="navlink"><a href="/profile">Profile</a></div>
   </nav>
-
-  <section id="addBlockset">
-    <button type="button" id="addBlocksetButton">New Blockset</button>
+  <section id="friends">
+    <div id="friendsHeader"><h2>Friends</h2></div>
   </section>
-
-  <section id="makeBlockset">
-
-  </section>
-
-  <section id="blocksets">
-    
-  </section>
-
-  <section id="container">
-    
-  </section>
-
-  <div id="blocksetMessage" class='hidden'>
-    <img id="speech" src="/assets/img/speech.png" alt="speech box"/>
-    <h3><span id="errorMessage"></span></h3>
-    <img id="blockset" src="assets/img/domo.png" alt="domo"/>
-  </div>
-  <script src="/assets/appBundle.js"></script>
+  <script src="/assets/profileBundle.js"></script>
 </body>
 </html>
