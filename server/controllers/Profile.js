@@ -1,16 +1,14 @@
-let username = "user";
+const username = 'user';
 
 const getName = () => {
-    
+
 };
 
-const profilePage = (req, res) => {
-    return res.render('profile', {
-        name: getName
-    });
-};
+const profilePage = (req, res) => res.render('profile', {
+  name: username,
+});
 
 module.exports = {
-    profilePage,
-    getName,
+  profilePage,
+  getName,
 };

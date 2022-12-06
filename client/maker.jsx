@@ -5,13 +5,15 @@ const { v4: uuidv4 } = require('uuid');
 const ntd = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const privacyLevelDesc = ["Only time visible to others", "Title visible to Group 1 (closest) friends", "Title visible to Group 2 friends", "Title visible to Group 3 friends", "Title visible to the public"];
 
+let csrf;
+
 const handleBlockset = (e) => {
     e.preventDefault();
     helper.hideError();
 
     const name = e.target.querySelector('#blocksetName').value;
     const visibility = e.target.querySelector('#blockVisibility').value;
-    const _csrf = e.target.querySelector('#_csrf').value;
+    const _csrf = csrf;
 
     if (!name || !visibility) {
         helper.handleError('All fields are required');
@@ -28,7 +30,7 @@ const deleteBlockset = (e) => {
     helper.hideError();
 
     const _id = e.target.querySelector('.blocksetId').value;
-    const _csrf = e.target.querySelector('._csrf').value;
+    const _csrf = csrf;
 
     if (!_id) {
         helper.handleError('Could not identify Blockset');
@@ -46,7 +48,7 @@ const deleteBlock = (e) => {
 
     const _id = e.target.querySelector('.blockId').value;
     const _bsid = e.target.querySelector('.blocksetId').value;
-    const _csrf = e.target.querySelector('._csrf').value;
+    const _csrf = csrf;
 
     if (!_id) {
         helper.handleError('Could not identify Block');
@@ -127,19 +129,8 @@ const addBlock = (e) => {
         helper.sendPost('/newBlock', {
             blocksetId: form.querySelector(".blocksetId").value,
             block: newBlock,
-            _csrf: form.querySelector(".csrf").value
+            _csrf: csrf
         }, loadScheduleFromServer);
-        /*
-        let blocksets;
-        if (!sessionStorage.getItem("blocksets")) {
-            blocksets = [];
-        } else {
-            blocksets = JSON.parse(sessionStorage.getItem("blocksets"));
-        }
-        blocksets.push(newBlock);
-        let blocksString = JSON.stringify(blocksets);
-        sessionStorage.setItem("blocksets", blocksString);
-        */
     }
 }
 
@@ -179,7 +170,6 @@ const BlockAdder = (props) => {
                 <option value="3">Title visible to the public</option>
             </select>
             <input className="blocksetId" type="hidden" name="blocksetId" value={props.blocksetId} />
-            <input className="csrf" type="hidden" name="csrf" value={props.csrf} />
             <button className="blockSubmit" onClick={addBlock}>Add Block</button>
             <span className="blockAdderWarning"></span>
         </div>
@@ -205,7 +195,6 @@ const NewBlocksetForm = (props) => {
                 <option value="3">{privacyLevelDesc[3]}</option>
                 <option value="3">{privacyLevelDesc[4]}</option>
             </select>
-            <input id="_csrf" type="hidden" name="_csrf" value={props.csrf} />
             <input className="makeBlocksetSubmit" type="submit" value="Make Blockset" />
         </form>
     );
@@ -228,14 +217,13 @@ const Blockset = (props) => {
                         className="deleteBlocksetForm"
                     >
                         <input className="blocksetId" type="hidden" name="blocksetId" value={props.blockset._id} />
-                        <input className="_csrf" type="hidden" name="_csrf" value={props.csrf} />
                         <input className="deleteSubmit" type="submit" value="Delete" />
                     </form>
                 </div>
                 <div className="blockList">
                     
                 </div>
-                <BlockAdder blocksetId={props.blockset._id} csrf={props.csrf}/>
+                <BlockAdder blocksetId={props.blockset._id}/>
             </div>
         );
     }
@@ -252,7 +240,6 @@ const Blockset = (props) => {
                 >
                     <input className="blockId" type="hidden" name="blockId" value={block.id} />
                     <input className="blocksetId" type="hidden" name="blocksetId" value={props.blockset._id} />
-                    <input className="_csrf" type="hidden" name="_csrf" value={props.csrf} />
                     <input className="deleteSubmit" type="submit" value="Delete" />
                 </form>
             </div>
@@ -270,14 +257,13 @@ const Blockset = (props) => {
                     className="deleteBlocksetForm"
                 >
                     <input className="blocksetId" type="hidden" name="blocksetId" value={props.blockset._id} />
-                    <input className="_csrf" type="hidden" name="_csrf" value={props.csrf} />
                     <input className="deleteSubmit" type="submit" value="Delete" />
                 </form>
             </div>
             <div className="blockList">
                 {blockNodes}
             </div>
-                <BlockAdder blocksetId={props.blockset._id} csrf={props.csrf}/>
+                <BlockAdder blocksetId={props.blockset._id}/>
         </div>
     )
 };
@@ -297,16 +283,10 @@ const loadScheduleFromServer = async () => {
         const blocksetElement = document.createElement('div');
         container.insertBefore(blocksetElement, container.firstChild);
         ReactDOM.render(
-            <Blockset csrf={tokenData.csrfToken} blockset={blockset} />,
+            <Blockset blockset={blockset} />,
             blocksetElement
         );
     });
-    /*
-    ReactDOM.render(
-        <Blockset csrf={tokenData.csrfToken} blockset={data.blocksets} />,
-        document.getElementById('blocksets')
-    );
-    */
 
     return data.blocksets;
 };
@@ -324,34 +304,15 @@ const AddBlockset = () => {
 const init = async () => {
     const response = await fetch('/getToken');
     const data = await response.json();
+    csrf = data.csrfToken;
 
     const addBlocksetButton = document.getElementById('addBlocksetButton');
     addBlocksetButton.onclick = AddBlockset;
 
     ReactDOM.render(
-        <NewBlocksetForm csrf={data.csrfToken} />,
+        <NewBlocksetForm />,
         document.getElementById('makeBlockset')
     );
-    /*
-    ReactDOM.render(
-        <BlockAdder />,
-        document.getElementById('makeBlockset')
-    );
-    */
-
-    /*
-    ReactDOM.render(
-        <Blockset csrf={data.csrfToken} blocksets={[]} />,
-        document.getElementById('blocksets')
-    );
-
-    let localBlocksets = loadLocalBlocksets.length ? loadLocalBlocksets : [];
-    const blocksets = localBlocksets.concat(loadBlocksetsFromServer);
-    ReactDOM.render(
-        <Blockset csrf={data.csrfToken} blockset={blocksets} />,
-        document.getElementById('blocksets')
-    );
-    */
 
     loadScheduleFromServer();
 
