@@ -12,10 +12,28 @@
   <nav><a href="/login"><img id="logo" src="/assets/img/icon.png" alt="calendar logo"/></a>
     <div class="navlink"><a href="/logout">Log out</a></div>
   </nav>
-  <section id="welcome"><h1>Welcome, {{name}}</h1></section>
+  <section id="welcome"><h1>Welcome, {{name}}!</h1></section>
   <section id="friends">
-    <div id="friendsHeader"><h2>Friends</h2></div>
+    <section id="currentFriends">
+      Current Friends
+    </section>
+    <section id="sendRequest">
+      Send request
+    </section>
+    <section id="friendRequestsOut">
+      Outgoing Friend Requests
+    </section>
+    <section id="friendRequestsIn">
+      Incoming Friend Requests
+    </section>
   </section>
+
+  <div id="blocksetMessage" class='hidden'>
+    <img id="speech" src="/assets/img/speech.png" alt="speech box"/>
+    <h3><span id="errorMessage"></span></h3>
+    <img id="blockset" src="assets/img/domo.png" alt="domo"/>
+  </div>
+  
   <script src="/assets/profileBundle.js"></script>
 </body>
 </html>

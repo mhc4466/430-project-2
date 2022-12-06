@@ -9,24 +9,58 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./client/helper.js":
+/*!**************************!*\
+  !*** ./client/helper.js ***!
+  \**************************/
+/***/ ((module) => {
+
+eval("/* Takes in an error message. Sets the error message up in html, and\r\n   displays it to the user. Will be hidden by other events that could\r\n   end in an error.\r\n*/\nconst handleError = message => {\n  document.getElementById('errorMessage').textContent = message;\n  document.getElementById('blocksetMessage').classList.remove('hidden');\n};\n\n/* Sends post requests to the server using fetch. Will look for various\r\n   entries in the response JSON object, and will handle them appropriately.\r\n*/\nconst sendPost = async (url, data, handler) => {\n  const response = await fetch(url, {\n    method: 'POST',\n    headers: {\n      'Content-Type': 'application/json'\n    },\n    body: JSON.stringify(data)\n  });\n  const result = await response.json();\n  document.getElementById('blocksetMessage').classList.add('hidden');\n  if (result.redirect) {\n    window.location = result.redirect;\n  }\n  if (result.error) {\n    handleError(result.error);\n  }\n  if (handler) {\n    handler(result);\n  }\n};\nconst hideError = () => {\n  document.getElementById('blocksetMessage').classList.add('hidden');\n};\nmodule.exports = {\n  handleError,\n  sendPost,\n  hideError\n};\n\n//# sourceURL=webpack://Logins/./client/helper.js?");
+
+/***/ }),
+
 /***/ "./client/profile.jsx":
 /*!****************************!*\
   !*** ./client/profile.jsx ***!
   \****************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("console.log(\"init\");\n\n//# sourceURL=webpack://Logins/./client/profile.jsx?");
+eval("let csrf;\nconst helper = __webpack_require__(/*! ./helper.js */ \"./client/helper.js\");\nconst addFriend = async e => {\n  e.preventDefault();\n  helper.hideError();\n  const confirm = e.target.querySelector('.confirm').value;\n  const recipient = e.target.querySelector('.recipient').value;\n  const _csrf = csrf;\n  const url = `getUserByName?name=${recipient}`;\n  if (!recipient) {\n    helper.handleError('Field is empty');\n    return false;\n  }\n  const response = await fetch(url, {\n    method: 'GET',\n    headers: {\n      'Content-Type': 'application/json'\n    }\n  });\n  const result = await response.json();\n  console.log(result);\n  let recipientId;\n  if (result) {\n    recipientId = result.user._id;\n  }\n  console.log(recipientId);\n  if (result) {\n    helper.sendPost(e.target.action, {\n      confirm,\n      recipient: recipientId,\n      _csrf\n    });\n  }\n  return false;\n};\nconst FriendsList = props => {\n  if (!props.friends || props.friends.length === 0) {\n    return /*#__PURE__*/React.createElement(\"div\", {\n      className: \"listContainer\"\n    }, /*#__PURE__*/React.createElement(\"h3\", {\n      className: \"listHeader\"\n    }, \"No friends yet\"));\n  }\n};\nconst AddFriend = props => {\n  return /*#__PURE__*/React.createElement(\"div\", {\n    className: \"listHeader\"\n  }, /*#__PURE__*/React.createElement(\"form\", {\n    onSubmit: addFriend,\n    name: \"addFriendForm\",\n    action: \"/addFriend\",\n    method: \"POST\",\n    id: \"addFriendForm\"\n  }, /*#__PURE__*/React.createElement(\"input\", {\n    className: \"recipient\",\n    type: \"text\"\n  }), /*#__PURE__*/React.createElement(\"input\", {\n    className: \"confirm\",\n    type: \"hidden\",\n    name: \"confirmInput\",\n    value: false\n  }), /*#__PURE__*/React.createElement(\"input\", {\n    type: \"submit\",\n    value: \"Send Request\"\n  })));\n};\nconst RequestsOutgoing = props => {\n  if (!props.friends || props.friends.length === 0) {\n    return /*#__PURE__*/React.createElement(\"div\", {\n      className: \"listContainer\"\n    }, /*#__PURE__*/React.createElement(\"h3\", {\n      className: \"listHeader\"\n    }, \"Outgoing\"));\n  }\n};\nconst RequestsIncoming = props => {\n  if (!props.friends || props.friends.length === 0) {\n    return /*#__PURE__*/React.createElement(\"div\", {\n      className: \"listContainer\"\n    }, /*#__PURE__*/React.createElement(\"h3\", {\n      className: \"listHeader\"\n    }, \"Incoming\"));\n  }\n};\nconst init = async () => {\n  const response = await fetch('/getToken');\n  const data = await response.json();\n  csrf = data.csrfToken;\n  ReactDOM.render( /*#__PURE__*/React.createElement(FriendsList, {\n    friends: []\n  }), document.getElementById('currentFriends'));\n  ReactDOM.render( /*#__PURE__*/React.createElement(AddFriend, null), document.getElementById('sendRequest'));\n  ReactDOM.render( /*#__PURE__*/React.createElement(RequestsOutgoing, null), document.getElementById('friendRequestsOut'));\n  ReactDOM.render( /*#__PURE__*/React.createElement(RequestsIncoming, null), document.getElementById('friendRequestsIn'));\n};\nwindow.onload = init;\n\n//# sourceURL=webpack://Logins/./client/profile.jsx?");
 
 /***/ })
 
 /******/ 	});
 /************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
 /******/ 	
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = {};
-/******/ 	__webpack_modules__["./client/profile.jsx"]();
+/******/ 	var __webpack_exports__ = __webpack_require__("./client/profile.jsx");
 /******/ 	
 /******/ })()
 ;
