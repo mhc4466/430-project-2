@@ -113,7 +113,7 @@ const requestFriend = async (req, res) => {
   } catch (err) {
     return res.status(500).json({ error: 'An error occurred' });
   }
-  return res.status(500).json({ error: 'Unexpected behavior' });
+  return false;
 };
 
 const addFriend = (req, res) => {

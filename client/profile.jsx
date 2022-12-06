@@ -1,6 +1,30 @@
 let csrf;
 const helper = require('./helper.js');
 
+const sendGet = async (url) => {
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const result = await response.json();
+    return result;
+}
+
+const getFriends = async (e) => {
+    e.preventDefault();
+    helper.hideError();
+
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+}
+
 const addFriend = async (e) => {
     e.preventDefault();
     helper.hideError();
@@ -9,21 +33,12 @@ const addFriend = async (e) => {
     const recipient = e.target.querySelector('.recipient').value;
     const _csrf = csrf;
 
-    const url = `getUserByName?name=${recipient}`;
-
     if (!recipient) {
         helper.handleError('Field is empty');
         return false;
     }
-
-    const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
     
-    const result = await response.json();
+    const result = await sendGet(`getUserByName?name=${recipient}`);
     console.log(result);
 
     let recipientId;

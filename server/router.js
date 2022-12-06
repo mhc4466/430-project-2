@@ -23,6 +23,7 @@ const router = (app) => {
   app.post('/deleteBlock', mid.requiresLogin, controllers.Blockset.deleteBlock);
 
   app.get('/profile', mid.requiresSecure, mid.requiresLogin, controllers.Profile.profilePage);
+  app.get('/getFriends', mid.requiresLogin, controllers.Account.getFriends);
   app.get('/getUserByName', controllers.Account.getUserByName);
   app.post('/addFriend', mid.requiresLogin, controllers.Account.requestFriend);
 
