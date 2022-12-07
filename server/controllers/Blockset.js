@@ -5,6 +5,7 @@ const { Blockset } = models;
 
 const makerPage = (req, res) => res.render('app');
 
+// Unused in favor of newBlockset
 const makeBlockset = async (req, res) => {
   if (!req.body.name) {
     return res.status(400).json({ error: 'Name is required' });
@@ -28,11 +29,16 @@ const makeBlockset = async (req, res) => {
   }
 };
 
+// Create a new blockset in the database
+// Set its name and visibility to those requested by the user
+// Owner is set to the user who sent the request
+// Blocks is initialized as blank array
 const newBlockset = async (req, res) => {
   if (!req.body.name) {
     return res.status(400).json({ error: 'Name is required' });
   }
 
+  // Combine data
   const blocksetData = {
     name: req.body.name,
     visibility: req.body.visibility,
@@ -46,6 +52,7 @@ const newBlockset = async (req, res) => {
     return res.status(201).json({ name: addedBlockset.name, visiblity: addedBlockset.visiblity });
   } catch (err) {
     console.log(err);
+    // Forbid exact duplicates (may be impossible)
     if (err.code === 11000) {
       return res.status(400).json({ error: 'Blockset already exists' });
     }
@@ -53,6 +60,7 @@ const newBlockset = async (req, res) => {
   }
 };
 
+// Add the provided block data to the specified blockset
 const newBlock = (req, res) => {
   if (!req.body.blocksetId || !req.body.block) {
     return res.status(400).json({ error: 'Client failed to provide new block to add' });
@@ -69,6 +77,7 @@ const newBlock = (req, res) => {
   return 1;
 };
 
+// Use ID to find and delete blockset
 const deleteBlockset = async (req, res) => {
   if (!req.body._id) {
     return res.status(400).json({ error: 'Server failed to receive Blockset ID from client' });
@@ -83,11 +92,11 @@ const deleteBlockset = async (req, res) => {
   }
 };
 
+// Under blockset of provided ID, find and delete block of other provided ID
 const deleteBlock = async (req, res) => {
   if (!req.body._id || !req.body._bsid) {
     return res.status(400).json({ error: 'Server failed to receive an ID from client' });
   }
-
   try {
     Blockset.deleteBlockByUUID(req.body._bsid, req.body._id);
     return res.status(200).json({ message: 'Blockset deleted' });
@@ -97,6 +106,7 @@ const deleteBlock = async (req, res) => {
   }
 };
 
+// Unused in favor of getSchedule
 const getBlocksets = (req, res) => {
   BlocksetModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
@@ -108,6 +118,7 @@ const getBlocksets = (req, res) => {
   });
 };
 
+// Gets all blocksets that belong to the user who sent the request
 const getSchedule = (req, res) => {
   BlocksetModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {

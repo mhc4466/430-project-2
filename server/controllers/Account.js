@@ -62,6 +62,7 @@ const signup = async (req, res) => {
   }
 };
 
+// Simply returns a user that matches the name exactly
 const getUserByName = (req, res) => {
   AccountModel.getUserByName(req.query.name, (err, doc) => {
     if (err) {
@@ -73,6 +74,7 @@ const getUserByName = (req, res) => {
   });
 };
 
+// Attempts to send a friend request to the target user.
 const requestFriend = async (req, res) => {
   const { confirm } = req.body;
   const sender = req.session.account._id;
@@ -81,12 +83,12 @@ const requestFriend = async (req, res) => {
   if (!sender || !recipient) {
     return res.status(400).json({ error: 'Server did not receive both users in interaction' });
   }
-  // const recipientDoc = await AccountModel.getUserByName(recipient);
 
   if (sender === recipient) {
     return res.status(400).json({ error: 'Cannot add self as friend' });
   }
 
+  // Uses various shorthand error codes to submit a message to the client
   try {
     AccountModel.friendInteraction(confirm, sender, recipient, (code) => {
       switch (code) {
@@ -110,13 +112,13 @@ const requestFriend = async (req, res) => {
           return res.status(500).json({ error: 'Unexpected behavior' });
       }
     });
-    // return res.json(500).json({ error: 'Unexpected behavior' });
   } catch (err) {
     return res.status(500).json({ error: 'An error occurred' });
   }
   return false;
 };
 
+// Unimplemented
 const addFriend = (req, res) => {
   const user1 = req.session.account._id;
   const user2 = req.body.other;
@@ -132,7 +134,14 @@ const getFriends = async (req, res) => {
   search = { friends: user };
   search = { 'friends._id': user, 'friends.level': { $lt: 4 } };
   const friendDocs = await AccountModel.find(search).select('_id username premium');
+  const quantity = friendDocs.length;
 
+  const resFriends = (friendsObjsComplete) => {
+    console.log(friendsObjsComplete);
+    return res.json({ friends: friendsObjsComplete });
+  };
+  // Go through each friend doc, look through the blocksets owned by that friend, and
+  //  if any blockset contains the current time, then set a boolean to true
   const friendObjs = [];
   friendDocs.forEach((friendDoc) => {
     const friendObj = {
@@ -149,6 +158,8 @@ const getFriends = async (req, res) => {
     console.log(now);
     BlocksetModel.find({ owner: friendDoc._id }).select('visibility blocks name').exec((err, docs) => {
       const blocksets = docs;
+      const blocksetQuantity = blocksets.length;
+      let blocksetCounter = 0;
       console.log(blocksets);
       // Iterate through all blocksets a user owns
       blocksets.forEach((blockset) => {
@@ -170,73 +181,27 @@ const getFriends = async (req, res) => {
                 day < block.endDay
                   || (day === block.endDay && hour < endHour && minute < endMinute)
               ) {
+                // If the user is a premium member, attach the title of their blockset.
+                // If not, add generic message
                 if (friendObj.premium) {
-                  friendObj.avail = 'Scheduled now';
-                } else {
                   friendObj.avail = blockset.name;
+                } else {
+                  friendObj.avail = 'Scheduled now!';
                 }
               }
             }
           });
         }
-      });
-    });
-    friendObjs.push(friendObj);
-  });
-
-  // Go through each friend doc, look through the blocksets owned by that friend, and
-  //  if any blockset contains the current time, then set a boolean to true
-  /*
-  for (const friendDoc of friendDocs) {
-    const friendObj = {
-      _id: friendDoc._id,
-      username: friendDoc.username,
-      avail: 'Not scheduled',
-      premium: friendDoc.premium,
-    };
-    // friendDoc.avail = false;
-    const now = new Date();
-    const day = now.getDay();
-    const hour = now.getHours();
-    const minute = now.getMinutes();
-    console.log(now);
-    const blocksets = BlocksetModel.find({ owner: friendDoc._id }).select('visibility blocks name');
-    console.log(blocksets);
-    // Iterate through all blocksets a user owns
-    for (const blockset of blocksets) {
-      const { blocks } = blockset;
-      // Iterate through all blocks in a blockset
-      if (blocks && blocks.length && blocks.length > 0) {
-        for (const block of blocks) {
-          const startHour = block.startTime.substring(0, block.startTime.indexOf(':'));
-          const startMinute = block.startTime.substring(block.startTime.indexOf(':') + 1);
-          const endHour = block.endTime.substring(0, block.endTime.indexOf(':'));
-          const endMinute = block.endTime.substring(block.endTime.indexOf(':') + 1);
-
-          // Verify that the time is after the start
-          if (
-            day > block.startDay
-            || (day === block.startDay && hour > startHour && minute > startMinute)) {
-            // Verify that the time is before the end
-            if (
-              day < block.endDay
-                || (day === block.endDay && hour < endHour && minute < endMinute)
-            ) {
-              if (friendObj.premium) {
-                friendObj.avail = 'Scheduled now';
-              } else {
-                friendObj.avail = blockset.name;
-              }
-            }
+        blocksetCounter++;
+        if (blocksetCounter >= blocksetQuantity) {
+          friendObjs.push(friendObj);
+          if (friendObjs.length === quantity) {
+            resFriends(friendObjs);
           }
         }
-      }
-    }
-    friendObjs.push(friendObj);
-  }
-  */
-  console.log(friendObjs);
-  return res.json({ friends: friendObjs });
+      });
+    });
+  });
 };
 
 const notFound = (req, res) => {

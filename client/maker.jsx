@@ -7,6 +7,7 @@ const privacyLevelDesc = ["Only time visible to others", "Title visible to Group
 
 let csrf;
 
+//Attempts to tell the database to create a new blockset
 const handleBlockset = (e) => {
     e.preventDefault();
     helper.hideError();
@@ -25,6 +26,7 @@ const handleBlockset = (e) => {
     return false;
 };
 
+//Attemps to delete blockset from the database
 const deleteBlockset = (e) => {
     e.preventDefault();
     helper.hideError();
@@ -42,6 +44,7 @@ const deleteBlockset = (e) => {
     return false;
 };
 
+//Attempts to delete block from the database
 const deleteBlock = (e) => {
     e.preventDefault();
     helper.hideError();
@@ -132,6 +135,7 @@ const addBlock = (e) => {
     }
 }
 
+//React component as part of a blockset which is used to append a simple block to the blockset
 const BlockAdder = (props) => {
     return (
         <div className="blockAdderForm">
@@ -166,6 +170,7 @@ const BlockAdder = (props) => {
     );
 };
 
+//React component with a form to create a new blockset with a name and privacy level
 const NewBlocksetForm = (props) => {
     return (
         <form id="blocksetForm"
@@ -195,6 +200,7 @@ const NewBlocksetForm = (props) => {
 //Contains a place to add new blocks and delete them
 const Blockset = (props) => {
     console.log(props);
+    //Empty placeholder content; still contains a blockadder
     if (!props.blockset.blocks || props.blockset.blocks.length === 0) {
         return (
             <div className="blockset hero is-primary my-4 mx-4 py-4 px-4">
@@ -218,6 +224,7 @@ const Blockset = (props) => {
         );
     }
 
+    //If blocks are provided, generate a list of mini nodes to display
     const blockNodes = props.blockset.blocks.map(block => {
         return (
             <div key={block.id} className="block field container py-2">
@@ -236,6 +243,7 @@ const Blockset = (props) => {
         );
     });
 
+    //If blocks are provided, create a block list from the generated nodes above
     return (
         <div className="blockset hero is-primary">
             <div className="blocksetHeader has-background-primary">
@@ -258,6 +266,7 @@ const Blockset = (props) => {
     )
 };
 
+//Gets all blocksets from the database that belong to this user
 const loadScheduleFromServer = async () => {
     const response = await fetch('/getSchedule');
     const data = await response.json();
@@ -279,16 +288,6 @@ const loadScheduleFromServer = async () => {
     });
 
     return data.blocksets;
-};
-
-const AddBlockset = () => {
-    const container = document.getElementById('container');
-    const unit = document.createElement('div');
-    container.insertBefore(unit, container.firstChild);
-    ReactDOM.render(
-        <Blockset />,
-        unit
-    );
 };
 
 const init = async () => {

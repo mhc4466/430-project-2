@@ -1,6 +1,7 @@
 let csrf;
 const helper = require('./helper.js');
 
+//Helper function for simple get requests
 const sendGet = async (url) => {
     const response = await fetch(url, {
         method: 'GET',
@@ -13,17 +14,20 @@ const sendGet = async (url) => {
     return result;
 }
 
+//Get this user's friends, grabbing each friend as data containing their ID, username, and Avail status
 const getFriends = async () => {
     helper.hideError();
 
     const result = await sendGet('getFriends');
     
+    //Update the friends list with the results
     ReactDOM.render(
         <FriendsList friends={result.friends} />,
         document.getElementById('currentFriends')
     );
 }
 
+//Attempt to send a friend request to the recipient
 const addFriend = async (e) => {
     e.preventDefault();
     helper.hideError();
@@ -37,14 +41,13 @@ const addFriend = async (e) => {
         return false;
     }
     
+    //Recipient is encoded in name form, so get an ID before sending another request
     const result = await sendGet(`getUserByName?name=${recipient}`);
-    console.log(result);
 
     let recipientId;
     if (result) {
         recipientId = result.user._id;
     }
-    console.log(recipientId);
 
     if (result) {
         helper.sendPost(e.target.action, {confirm, recipient: recipientId, _csrf});
@@ -53,6 +56,8 @@ const addFriend = async (e) => {
     return false;
 };
 
+//React component that shows a blank placeholder if the user has no friends, but if provided
+//  with a list, parse those out into a list of friends
 const FriendsList = (props) => {
     if (!props.friends || props.friends.length === 0) {
         return (
@@ -78,6 +83,7 @@ const FriendsList = (props) => {
     }
 };
 
+//React component containing a form to search for a person and request them as a friend
 const AddFriend = (props) => {
     return (
         <div className="listHeader">
@@ -95,21 +101,23 @@ const AddFriend = (props) => {
     )
 };
 
+//Unimplemented
 const RequestsOutgoing = (props) => {
     if (!props.friends || props.friends.length === 0) {
         return (
             <div className="listContainer">
-                <h3 className="listHeader">Outgoing</h3>
+                <h3 className="listHeader"></h3>
             </div>
         );
     }
 };
 
+//Unimplemented
 const RequestsIncoming = (props) => {
     if (!props.friends || props.friends.length === 0) {
         return (
             <div className="listContainer">
-                <h3 className="listHeader">Incoming</h3>
+                <h3 className="listHeader"></h3>
             </div>
         );
     }

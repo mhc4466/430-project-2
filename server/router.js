@@ -18,7 +18,7 @@ const router = (app) => {
   app.post('/maker', mid.requiresLogin, controllers.Blockset.makeBlockset);
   app.post('/newBlock', mid.requiresLogin, controllers.Blockset.newBlock);
 
-  app.post('/delete', mid.requiresLogin, controllers.Blockset.deleteBlockset);
+  // app.post('/delete', mid.requiresLogin, controllers.Blockset.deleteBlockset);
   app.post('/deleteBlockset', mid.requiresLogin, controllers.Blockset.deleteBlockset);
   app.post('/deleteBlock', mid.requiresLogin, controllers.Blockset.deleteBlock);
 
