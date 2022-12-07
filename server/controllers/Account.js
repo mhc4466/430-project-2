@@ -231,6 +231,36 @@ const isPremium = async (req, res) => {
   return res.status(200).json({ premium: doc[0].premium });
 };
 
+// A
+const changePass = async (req, res) => {
+  const username = `${req.body.name}`;
+  const oldPass = `${req.body.oldPass}`;
+  const newPass = `${req.body.newPass}`;
+
+  if (!oldPass || !newPass) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+
+  if (oldPass === newPass) {
+    return res.status(400).json({ error: 'Passwords cannot be the same' });
+  }
+
+  return Account.authenticate(username, oldPass, async (err, account) => {
+    if (err || !account) {
+      console.log('failed');
+      return res.status(401).json({ error: 'Wrong username or password' });
+    }
+    console.log('passed');
+    const hash = await Account.generateHash(newPass);
+    const search = { _id: req.session.account._id };
+    await AccountModel.updateOne(
+      search,
+      { password: hash },
+    );
+    return res.status(202).json({ message: 'Password changed' });
+  });
+};
+
 const notFound = (req, res) => {
   res.status(404).render('notFound', {
     page: req.url,
@@ -249,5 +279,6 @@ module.exports = {
   getFriends,
   premium,
   isPremium,
+  changePass,
   notFound,
 };

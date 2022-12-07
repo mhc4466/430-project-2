@@ -32,6 +32,8 @@ const router = (app) => {
   app.post('/premium', mid.requiresLogin, controllers.Account.premium);
   app.get('/premium', mid.requiresLogin, controllers.Account.isPremium);
 
+  app.post('/changePass', mid.requiresLogin, controllers.Account.changePass);
+
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.get('/*', controllers.Account.notFound);
 };

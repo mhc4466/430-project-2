@@ -67,6 +67,30 @@ const premiumify = async (e) => {
     });
 }
 
+const changePass = async (e) => {
+    e.preventDefault();
+    helper.hideError();
+
+    const name = e.target.querySelector('#user').value;
+    const oldPass = e.target.querySelector('#oldPass').value;
+    const newPass = e.target.querySelector('#newPass').value;
+    const _csrf = csrf;
+
+    if (!name || !oldPass || !newPass) {
+        helper.handleError('All fields are required');
+        return false;
+    }
+
+    if (oldPass === newPass) {
+        helper.handleError('New password cannot be the same as old password');
+        return false;
+    }
+
+    helper.sendPost(e.target.action, {name, oldPass, newPass, _csrf});
+
+    return false;
+}
+
 
 //React component that shows a blank placeholder if the user has no friends, but if provided
 //  with a list, parse those out into a list of friends
@@ -113,6 +137,45 @@ const AddFriend = (props) => {
     )
 };
 
+const ChangePassword = (props) => {
+    return (
+        <div className="passwordForm">
+            <form onSubmit={changePass}
+                name="changePasswordForm"
+                action="/changePass"
+                method="POST"
+                id="changePasswordForm"
+            >
+                <div className="field is-grouped is-grouped-centered">
+                    <label className="label" htmlFor="username">Username: </label>
+                    <div className="control">
+                        <input className="input" id="user" type="text" name="username" placeholder="username" />
+                    </div>
+                </div>
+                
+                <div className="field is-grouped is-grouped-centered">
+                    <label className="label" htmlFor="oldPass">Old Password: </label>
+                    <div className="control">
+                        <input className="input" id="oldPass" type="password" name="pass" placeholder="password" />
+                    </div>
+                </div>
+                <div className="field is-grouped is-grouped-centered">
+                    <label className="label" htmlFor="newPass">New Password: </label>
+                    <div className="control">
+                        <input className="input" id="newPass" type="password" name="pass" placeholder="password" />
+                    </div>
+                </div>
+                <input id="_csrf" type="hidden" name="_csrf" value={csrf} />
+                <div className="field is-grouped is-grouped-centered">
+                    <div className="control">
+                        <input className="button is-link formSubmit" type="submit" value="Change Password" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    )
+}
+
 //Unimplemented
 const RequestsOutgoing = (props) => {
     if (!props.friends || props.friends.length === 0) {
@@ -158,6 +221,11 @@ const init = async () => {
     ReactDOM.render(
         <RequestsIncoming />,
         document.getElementById('friendRequestsIn')
+    );
+
+    ReactDOM.render(
+        <ChangePassword />,
+        document.getElementById('passwordSection')
     );
 
     document.getElementById('goPremium').onclick = premiumify;
