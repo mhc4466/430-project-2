@@ -33,51 +33,7 @@ html, body {
     transition: background-color 0.8s ease;
     background-color: #66bdff;
 }
-/*
-.blocksetForm {
-    border: 2px solid #338acc;
-    height: 35px;
-    width: 900px;
-    margin-top:0px;
-    padding-top:10px;
-    background-color: #55acee;
-    border-bottom-right-radius: 4px;
-    border-top-right-radius: 4px;
-}
 
-.blocksetForm label {
-    display: inline-block;
-    width: 75px;
-    margin-left: 10px;
-    font-size: 1.2em;
-    color: white;
-}
-
-.blocksetForm input[type=text] {
-}
-
-
-.makeBlocksetSubmit {
-    transition: background-color 0.4s ease;
-    display: inline;
-    width: 90px;
-    background-color: #55acee;
-    border-radius: 2px;
-    color: white;
-    text-decoration: none;
-}
-*/
-
-/*
-.makeBlocksetSubmit:link, .makeBlocksetSubmit:visited, .makeBlocksetSubmit:hover, .makeBlocksetSubmit:active {
-    color: white;
-}
-
-.makeBlocksetSubmit:hover {
-    transition: background-color 0.4s ease;
-    background-color: #338acc;
-}
-*/
 .mainForm {
     height: 300px;
     width: 80%;
@@ -98,33 +54,6 @@ html, body {
     text-align: right;
     font-size: 1.2em;
 }
-
-/*
-.formSubmit {
-    transition: background-color 0.4s ease;
-    display: block;
-    text-align: center;
-    margin: 0 auto;
-    margin-top: 14px;
-    font-size: 1.2em;
-    width: 100px;
-    background-color: #55acee;
-    border-radius: 2px;
-    border-color: #66acee;
-    padding: 3px 0px;
-    color: white;
-    text-decoration: none;
-}
-
-.formSubmit:link, .formSubmit:visited, .formSubmit:hover, .formSubmit:active {
-    color: white;
-}
-
-.formSubmit:hover {
-    transition: background-color 0.4s ease;
-    background-color: #338acc;
-}
-*/
 
 #user, #pass, #pass2 {
     text-align: center;
@@ -190,82 +119,6 @@ html, body {
     margin: 0 auto;
     margin-top: 100px;
 }
-
-/*
-.blockset {
-    width: 95%;
-    margin: 0 auto;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    border: 2px solid #55acee;
-    border-radius: 4px;
-    padding: 10px;
-    min-height:60px;
-    overflow: hidden;
-}
-
-.blockset:hover {
-    transition: border-color 0.2s ease-out;
-    border-color: rgba(255,255,255, 0.8);
-    transition: background-color 2.6s ease-out;
-    background-color: #66bfff;
-}
-*/
-
-/*
-img.domoFace {
-    margin-left: 25px;
-    margin-right: 10px;
-    height: 50px;
-    width: 50px;
-    border-radius: 4px;
-    margin-top:10px;
-    float:left;
-}
-
-h3.emptyBlockset {
-    width: 400px;
-    font-size: 1.5em;
-    margin: 0 auto;
-    text-align: center;
-    margin-top: 18px;
-}
-
-h3.blocksetName {
-    float:left;
-    width: 200px;
-    font-weight: bold;
-    padding-left: 65px;
-    font-size: 1.5em;
-}
-
-h3.blocksetAge {
-    float:right;
-    text-align: left;
-    width: 100px;
-    font-weight: bold;
-    padding-right: 40px;
-    font-size: 1.5em;
-}
-
-h3.blocksetWeight {
-    float: right;
-    text-align: left;
-    width: 100px;
-    font-weight: bold;
-    padding-right: 40px;
-    font-size: 1.5em;
-}
-*/
-/*
-.blockset:first-child {
-    margin-top: 10px;
-}
-
-.blockset:last-child {
-    margin-bottom:10px;
-}
-*/
 
 .deleteSubmit {
     width: 90px;
