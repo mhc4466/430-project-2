@@ -1,9 +1,3 @@
-// const username = 'user';
-
-const getName = () => {
-
-};
-
 const profilePage = (req, res) => {
   res.render('profile', {
     name: req.session.account.username,
@@ -12,5 +6,4 @@ const profilePage = (req, res) => {
 
 module.exports = {
   profilePage,
-  getName,
 };

@@ -50,13 +50,26 @@ const LoginWindow = (props) => {
             action="/login"
             method="POST"
             className="mainForm"
-        >
-            <label htmlFor="username">Username: </label>
-            <input id="user" type="text" name="username" placeholder="username" />
-            <label htmlFor="pass">Password: </label>
-            <input id="pass" type="password" name="pass" placeholder="password" />
+        >   
+            <div className="field is-grouped is-grouped-centered">
+                <label className="label" htmlFor="username">Username: </label>
+                <div className="control">
+                    <input className="input" id="user" type="text" name="username" placeholder="username" />
+                </div>
+            </div>
+            
+            <div className="field is-grouped is-grouped-centered">
+                <label className="label" htmlFor="pass">Password: </label>
+                <div className="control">
+                    <input className="input" id="pass" type="password" name="pass" placeholder="password" />
+                </div>
+            </div>
             <input id="_csrf" type="hidden" name="_csrf" value={props.csrf} />
-            <input className="formSubmit" type="submit" value="Sign in" />
+            <div className="field is-grouped is-grouped-centered">
+                <div className="control">
+                    <input className="button is-link formSubmit" type="submit" value="Sign in" />
+                </div>
+            </div>
         </form>
     );
 };

@@ -56,6 +56,12 @@ const FriendsList = (props) => {
                 <h3 className="listHeader">No friends yet</h3>
             </div>
         );
+    } else {
+        return (
+            <div className="listContainer">
+                <h3 className="listHeader"></h3>
+            </div>
+        )
     }
 };
 

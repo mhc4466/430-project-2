@@ -27,6 +27,8 @@ const router = (app) => {
   app.get('/getUserByName', controllers.Account.getUserByName);
   app.post('/addFriend', mid.requiresLogin, controllers.Account.requestFriend);
 
+  app.get('/schedule', mid.requiresSecure, controllers.Schedule.schedulePage);
+
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 
