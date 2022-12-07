@@ -104,8 +104,7 @@ const addBlock = (e) => {
     const warning = form.querySelector(".blockAdderWarning");
     warning.innerHTML = "";
     //Ensure necessary fields are populated
-    if (form.querySelector(".blockVisibility").value === '' ||
-    form.querySelector(".blockStartDay").value === '' ||
+    if (form.querySelector(".blockStartDay").value === '' ||
     form.querySelector(".blockStartTime").value === '' ||
     form.querySelector(".blockEndDay").value === '' ||
     form.querySelector(".blockEndTime").value === '') {
@@ -120,7 +119,6 @@ const addBlock = (e) => {
         const newBlock = {};
         //Generates a unique id for this block
         newBlock.id = uuidv4();
-        newBlock.visibility = form.querySelector(".blockVisibility").value;
         newBlock.startDay = form.querySelector(".blockStartDay").value;
         newBlock.startTime = form.querySelector(".blockStartTime").value;
         newBlock.endDay = form.querySelector(".blockEndDay").value;
@@ -161,14 +159,6 @@ const BlockAdder = (props) => {
                 <option value="6">Saturday</option>
             </select>
             <input className="blockEndTime" type="time" name="endTime" onChange={sanitizeBlock}></input>
-            <label htmlFor="visibility">Visibility: </label>
-            <select className="blockVisibility" name="visibility" defaultValue="0">
-                <option value="0">{privacyLevelDesc[0]}</option>
-                <option value="1">Title visible to Group 1 (closest) friends</option>
-                <option value="2">Title visible to Group 2 friends</option>
-                <option value="3">Title visible to Group 3 friends</option>
-                <option value="3">Title visible to the public</option>
-            </select>
             <input className="blocksetId" type="hidden" name="blocksetId" value={props.blocksetId} />
             <button className="blockSubmit" onClick={addBlock}>Add Block</button>
             <span className="blockAdderWarning"></span>
@@ -183,7 +173,7 @@ const NewBlocksetForm = (props) => {
             name="blocksetForm"
             action="/newBlockset"
             method="POST"
-            className="blocksetForm"
+            className="blocksetForm notification is-primary"
         >
             <label htmlFor="name">Name: </label>
             <input id="blocksetName" type="text" name="name" placeholder="Blockset Name" />
@@ -207,8 +197,8 @@ const Blockset = (props) => {
     console.log(props);
     if (!props.blockset.blocks || props.blockset.blocks.length === 0) {
         return (
-            <div className="blockset">
-                <div className="blocksetHeader">
+            <div className="blockset hero is-primary my-4 mx-4 py-4 px-4">
+                <div className="blocksetHeader has-background-primary">
                     <span className="blocksetName"><h3>{props.blockset.name}</h3></span>
                     <form onSubmit={deleteBlockset} 
                         name="deleteBlocksetForm" 
@@ -230,8 +220,8 @@ const Blockset = (props) => {
 
     const blockNodes = props.blockset.blocks.map(block => {
         return (
-            <div key={block.id} className="block">
-                <h3 className="blockName"> {ntd[block.startDay]} {block.startTime} - {ntd[block.endDay]} {block.endTime}</h3>
+            <div key={block.id} className="block field container py-2">
+                <h3 className="blockName"> {ntd[block.startDay]} {block.startTime} - {ntd[block.endDay]} {block.endTime} </h3>
                 <form className="deleteBlockForm" 
                     onSubmit={deleteBlock} 
                     name="deleteBlockForm" 
@@ -240,15 +230,15 @@ const Blockset = (props) => {
                 >
                     <input className="blockId" type="hidden" name="blockId" value={block.id} />
                     <input className="blocksetId" type="hidden" name="blocksetId" value={props.blockset._id} />
-                    <input className="deleteSubmit" type="submit" value="Delete" />
+                    <input className="button is-link deleteSubmit" type="submit" value="Delete" />
                 </form>
             </div>
         );
     });
 
     return (
-        <div className="blockset">
-            <div className="blocksetHeader">
+        <div className="blockset hero is-primary">
+            <div className="blocksetHeader has-background-primary">
                 <span className="blocksetName"><h3>{props.blockset.name}</h3></span>
                 <form onSubmit={deleteBlockset} 
                     name="deleteBlocksetForm" 
@@ -257,7 +247,7 @@ const Blockset = (props) => {
                     className="deleteBlocksetForm"
                 >
                     <input className="blocksetId" type="hidden" name="blocksetId" value={props.blockset._id} />
-                    <input className="deleteSubmit" type="submit" value="Delete" />
+                    <input className="button is-link deleteSubmit" type="submit" value="Delete" />
                 </form>
             </div>
             <div className="blockList">
@@ -305,9 +295,6 @@ const init = async () => {
     const response = await fetch('/getToken');
     const data = await response.json();
     csrf = data.csrfToken;
-
-    const addBlocksetButton = document.getElementById('addBlocksetButton');
-    addBlocksetButton.onclick = AddBlockset;
 
     ReactDOM.render(
         <NewBlocksetForm />,

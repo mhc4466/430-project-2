@@ -1,5 +1,6 @@
 const models = require('../models');
 const AccountModel = require('../models/Account');
+const BlocksetModel = require('../models/Blockset');
 
 const { Account } = models;
 
@@ -124,10 +125,124 @@ const addFriend = (req, res) => {
   return res.status(200).json({ message: 'test' });
 };
 
+// Finds all users who have this user added as a friend
 const getFriends = async (req, res) => {
   const user = req.session.account._id;
-  const doc = await AccountModel.findOne({ _id: user }).select('friends').lean().exec();
-  return res.json({ friends: doc.friends });
+  let search = { _id: user, level: { $lt: 4 } };
+  search = { friends: user };
+  search = { 'friends._id': user, 'friends.level': { $lt: 4 } };
+  const friendDocs = await AccountModel.find(search).select('_id username premium');
+
+  const friendObjs = [];
+  friendDocs.forEach((friendDoc) => {
+    const friendObj = {
+      _id: friendDoc._id,
+      username: friendDoc.username,
+      avail: 'Not scheduled',
+      premium: friendDoc.premium,
+    };
+    // friendDoc.avail = false;
+    const now = new Date();
+    const day = now.getDay();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+    console.log(now);
+    BlocksetModel.find({ owner: friendDoc._id }).select('visibility blocks name').exec((err, docs) => {
+      const blocksets = docs;
+      console.log(blocksets);
+      // Iterate through all blocksets a user owns
+      blocksets.forEach((blockset) => {
+        const { blocks } = blockset;
+        // Iterate through all blocks in a blockset
+        if (blocks && blocks.length && blocks.length > 0) {
+          blocks.forEach((block) => {
+            const startHour = block.startTime.substring(0, block.startTime.indexOf(':'));
+            const startMinute = block.startTime.substring(block.startTime.indexOf(':') + 1);
+            const endHour = block.endTime.substring(0, block.endTime.indexOf(':'));
+            const endMinute = block.endTime.substring(block.endTime.indexOf(':') + 1);
+
+            // Verify that the time is after the start
+            if (
+              day > block.startDay
+              || (day === block.startDay && hour > startHour && minute > startMinute)) {
+              // Verify that the time is before the end
+              if (
+                day < block.endDay
+                  || (day === block.endDay && hour < endHour && minute < endMinute)
+              ) {
+                if (friendObj.premium) {
+                  friendObj.avail = 'Scheduled now';
+                } else {
+                  friendObj.avail = blockset.name;
+                }
+              }
+            }
+          });
+        }
+      });
+    });
+    friendObjs.push(friendObj);
+  });
+
+  // Go through each friend doc, look through the blocksets owned by that friend, and
+  //  if any blockset contains the current time, then set a boolean to true
+  /*
+  for (const friendDoc of friendDocs) {
+    const friendObj = {
+      _id: friendDoc._id,
+      username: friendDoc.username,
+      avail: 'Not scheduled',
+      premium: friendDoc.premium,
+    };
+    // friendDoc.avail = false;
+    const now = new Date();
+    const day = now.getDay();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+    console.log(now);
+    const blocksets = BlocksetModel.find({ owner: friendDoc._id }).select('visibility blocks name');
+    console.log(blocksets);
+    // Iterate through all blocksets a user owns
+    for (const blockset of blocksets) {
+      const { blocks } = blockset;
+      // Iterate through all blocks in a blockset
+      if (blocks && blocks.length && blocks.length > 0) {
+        for (const block of blocks) {
+          const startHour = block.startTime.substring(0, block.startTime.indexOf(':'));
+          const startMinute = block.startTime.substring(block.startTime.indexOf(':') + 1);
+          const endHour = block.endTime.substring(0, block.endTime.indexOf(':'));
+          const endMinute = block.endTime.substring(block.endTime.indexOf(':') + 1);
+
+          // Verify that the time is after the start
+          if (
+            day > block.startDay
+            || (day === block.startDay && hour > startHour && minute > startMinute)) {
+            // Verify that the time is before the end
+            if (
+              day < block.endDay
+                || (day === block.endDay && hour < endHour && minute < endMinute)
+            ) {
+              if (friendObj.premium) {
+                friendObj.avail = 'Scheduled now';
+              } else {
+                friendObj.avail = blockset.name;
+              }
+            }
+          }
+        }
+      }
+    }
+    friendObjs.push(friendObj);
+  }
+  */
+  console.log(friendObjs);
+  return res.json({ friends: friendObjs });
+};
+
+const notFound = (req, res) => {
+  res.status(404).render('notFound', {
+    page: req.url,
+  });
 };
 
 module.exports = {
@@ -140,4 +255,5 @@ module.exports = {
   requestFriend,
   addFriend,
   getFriends,
+  notFound,
 };

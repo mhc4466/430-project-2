@@ -17,7 +17,11 @@ const getFriends = async () => {
     helper.hideError();
 
     const result = await sendGet('getFriends');
-    console.log(result);
+    
+    ReactDOM.render(
+        <FriendsList friends={result.friends} />,
+        document.getElementById('currentFriends')
+    );
 }
 
 const addFriend = async (e) => {
@@ -57,9 +61,18 @@ const FriendsList = (props) => {
             </div>
         );
     } else {
+        const friendNodes = props.friends.map(friend => {
+            return (
+                <div key={friend._id} className="friendBlock">
+                    <span className="friendName"> {friend.username} </span>
+                    <span className="friendAvail"> Avail: {friend.avail} </span>
+                </div>
+            );
+        });
         return (
             <div className="listContainer">
-                <h3 className="listHeader"></h3>
+                <h3 className="listHeader">Friends:</h3>
+                {friendNodes}
             </div>
         )
     }

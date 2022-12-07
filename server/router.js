@@ -30,6 +30,7 @@ const router = (app) => {
   app.get('/schedule', mid.requiresSecure, controllers.Schedule.schedulePage);
 
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+  app.get('/*', controllers.Account.notFound);
 };
 
 module.exports = router;

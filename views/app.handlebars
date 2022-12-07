@@ -11,18 +11,24 @@
   <link rel="stylesheet" href="assets/bulma.css">
 </head>
 <body>
-  <nav><a href="/login"><img id="logo" src="/assets/img/icon.png" alt="calendar logo"/></a>
-    <div class="navlink"><a href="/logout">Log out</a></div>
-    <div class="navlink"><a href="/profile">Profile</a></div>
+  
+  <nav class="navbar has-background-primary" role="navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/login"><img id="logo" src="/assets/img/icon.png" alt="calendar logo"/></a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="/logout">Log out</a>
+        <a class="navbar-item" href="/login">Editor</a>
+        <a class="navbar-item" href="/profile">Profile</a>
+        <!--a class="navbar-item" href="/schedule">Schedule</a-->
+      </div>
+    </div>
   </nav>
 
-  <section id="addBlockset">
-    <button type="button" id="addBlocksetButton">New Blockset</button>
-  </section>
+  <div class="container" id="makeBlockset">
 
-  <section id="makeBlockset">
-
-  </section>
+  </div>
 
   <section id="blocksets">
     
