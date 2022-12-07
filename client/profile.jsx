@@ -56,6 +56,18 @@ const addFriend = async (e) => {
     return false;
 };
 
+const premiumify = async (e) => {
+    e.preventDefault();
+    helper.hideError();
+
+    const _csrf = csrf;
+
+    helper.sendPost('/premium', { _csrf }, () => {
+        location.reload();
+    });
+}
+
+
 //React component that shows a blank placeholder if the user has no friends, but if provided
 //  with a list, parse those out into a list of friends
 const FriendsList = (props) => {
@@ -147,6 +159,16 @@ const init = async () => {
         <RequestsIncoming />,
         document.getElementById('friendRequestsIn')
     );
+
+    document.getElementById('goPremium').onclick = premiumify;
+
+    const pResponse = await fetch('/premium');
+    const pData = await pResponse.json();
+    console.log(pData);
+    if (pData.premium === true) {
+        document.getElementById('premium').innerHTML = "Thanks for going premium! " + 
+        "The title of your time block will now appear in the friends list of those you've added!";
+    }
 
     getFriends();
 };

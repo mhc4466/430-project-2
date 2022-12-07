@@ -204,6 +204,33 @@ const getFriends = async (req, res) => {
   });
 };
 
+const premium = async (req, res) => {
+  const user = req.session.account._id;
+  const search = { _id: user };
+  const doc = await AccountModel.updateOne(
+    search,
+    { premium: true },
+  );
+  /*
+  const doc = await AccountModel.find(search);
+  return doc.updateOne(
+    { $set: { premium: true } },
+  ).select('name premium').lean().exec(callback);
+  */
+  return res.json({ user: doc });
+};
+
+const isPremium = async (req, res) => {
+  const user = req.session.account._id;
+  const search = { _id: user };
+  const doc = await AccountModel.find(
+    { search, premium: true },
+  ).select('name premium');
+  console.log('Premium result: ');
+  console.log(doc);
+  return res.status(200).json({ premium: doc[0].premium });
+};
+
 const notFound = (req, res) => {
   res.status(404).render('notFound', {
     page: req.url,
@@ -220,5 +247,7 @@ module.exports = {
   requestFriend,
   addFriend,
   getFriends,
+  premium,
+  isPremium,
   notFound,
 };

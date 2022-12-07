@@ -29,6 +29,9 @@ const router = (app) => {
 
   app.get('/schedule', mid.requiresSecure, controllers.Schedule.schedulePage);
 
+  app.post('/premium', mid.requiresLogin, controllers.Account.premium);
+  app.get('/premium', mid.requiresLogin, controllers.Account.isPremium);
+
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.get('/*', controllers.Account.notFound);
 };
